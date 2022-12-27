@@ -14,12 +14,16 @@ struct ContentTwoView: View {
     @FocusState private var amountIsFocus: Bool
     private var tipPercentages = [10, 15, 20, 25, 0]
     
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+    var totalAmount: Double {
         let tipSelection = Double(selectedPercentage)
         let tipValue = amount / 100.0 * tipSelection
         let total = amount + tipValue
-        return total / peopleCount
+        return total
+    }
+    
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        return totalAmount / peopleCount
     }
     
     var body: some View {
@@ -38,17 +42,25 @@ struct ContentTwoView: View {
                 
                 Section {
                     Picker("Tip Percentage", selection: $selectedPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                        ForEach(0..<101, id: \.self) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.navigationLink)
                 } header: {
-                    Text("How mcuh tips do you want to leave ?")
+                    Text("How much tips do you want to leave ?")
+                }
+                
+                Section {
+                    Text(totalAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                } header: {
+                    Text("Total Amount + Tips ")
                 }
                 
                 Section {
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                } header: {
+                    Text("Amount per person")
                 }
             }
             .navigationTitle("Tag 2")
