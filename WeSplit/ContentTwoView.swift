@@ -53,6 +53,7 @@ struct ContentTwoView: View {
                 
                 Section {
                     Text(totalAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .foregroundColor(selectedPercentage == 0 ? .red : .black)
                 } header: {
                     Text("Total Amount + Tips ")
                 }
